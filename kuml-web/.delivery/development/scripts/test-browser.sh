@@ -54,5 +54,4 @@ fi
 echo "kUML Web is healthy; starting browser test."
 
 cd /workspace/kuml-web
-npm ci
 npm run test:browser
