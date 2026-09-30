@@ -130,6 +130,9 @@ gradle-app.setting
 .env.local
 *.env
 
+# Local Node.js dependencies for kuml-web browser tests.
+kuml-web/node_modules/
+
 # IntelliJ Platform Gradle Plugin caches (V1.1.10 — kuml-jetbrains-plugin)
 .intellijPlatform/
 .DS_Store
