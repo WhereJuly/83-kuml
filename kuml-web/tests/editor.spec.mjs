@@ -7,7 +7,14 @@ test('editor accepts kUML and renders without a CodeMirror extension error', asy
   await page.goto('/');
 
   const editor = page.locator('#editor .cm-content');
-  await expect(editor).toBeVisible();
+  try {
+    await expect(editor).toBeVisible();
+  } catch (error) {
+    const browserErrors = pageErrors.length === 0 ? '(none captured)' : pageErrors.join('\n');
+    throw new Error(
+      `CodeMirror editor did not initialize.\nBrowser page errors:\n${browserErrors}\n\nOriginal assertion:\n${error.message}`,
+    );
+  }
 
   await editor.click();
   await page.keyboard.insertText(`
