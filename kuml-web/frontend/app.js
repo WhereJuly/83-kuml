@@ -4,9 +4,9 @@
 
 import { basicSetup } from 'codemirror';
 import { EditorView, keymap } from '@codemirror/view';
-import { EditorState } from '@codemirror/state';
+import { Compartment, EditorState } from '@codemirror/state';
 import { defaultKeymap } from '@codemirror/commands';
-import { oneDark } from '@codemirror/theme-one-dark';
+import { githubDark, githubLight } from '@uiw/codemirror-theme-github';
 
 // ── DOM refs ─────────────────────────────────────────────────────────────────
 const previewEl = document.getElementById('preview');
@@ -14,6 +14,7 @@ const errorBannerEl = document.getElementById('error-banner');
 const renderTimeEl = document.getElementById('render-time');
 const examplesSelect = document.getElementById('examples-select');
 const themeSelect = document.getElementById('theme-select');
+const editorThemeSelect = document.getElementById('editor-theme-select');
 const layoutSelect = document.getElementById('layout-select');
 const downloadSvgBtn = document.getElementById('download-svg');
 const downloadPngBtn = document.getElementById('download-png');
@@ -37,12 +38,19 @@ const updateListener = EditorView.updateListener.of((update) => {
   }
 });
 
+const editorTheme = new Compartment();
+
 const editorView = new EditorView({
   state: EditorState.create({
     doc: '',
-    extensions: [basicSetup, oneDark, keymap.of(defaultKeymap), updateListener],
+    extensions: [basicSetup, editorTheme.of(githubLight), keymap.of(defaultKeymap), updateListener],
   }),
   parent: document.getElementById('editor'),
+});
+
+editorThemeSelect.addEventListener('change', () => {
+  const theme = editorThemeSelect.value === 'dark' ? githubDark : githubLight;
+  editorView.dispatch({ effects: editorTheme.reconfigure(theme) });
 });
 
 // ── Render ────────────────────────────────────────────────────────────────────

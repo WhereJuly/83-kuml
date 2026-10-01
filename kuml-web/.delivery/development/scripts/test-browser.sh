@@ -2,7 +2,18 @@
 set -euo pipefail
 
 mkdir -p /workspace /output
-cp -a /source/. /workspace/
+echo "Copying source into the ephemeral workspace..."
+tar -C /source \
+  --exclude-vcs \
+  --exclude='**/node_modules' \
+  --exclude='**/node_modules/**' \
+  --exclude='**/.gradle' \
+  --exclude='**/.gradle/**' \
+  --exclude='**/build' \
+  --exclude='**/build/**' \
+  --exclude='**/.output' \
+  --exclude='**/.output/**' \
+  -cf - . | tar -C /workspace -xf -
 cd /workspace
 
 chmod +x gradlew
